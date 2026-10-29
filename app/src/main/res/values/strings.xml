@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TaskPulse</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="tasks_title">Tasks</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="insights_title">Insights</string>
+    <string name="settings_title">Settings</string>
+    <string name="quick_add_hint">Quick add task (e.g. Call client tomorrow 4pm high)…</string>
+    <string name="create_task">Create Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="task_details">Task Details</string>
+</resources>
