@@ -21,12 +21,17 @@ private val DarkColorScheme = darkColorScheme(
     secondaryContainer = TealSecondaryContainerDark,
     onSecondaryContainer = TealOnSecondaryContainerDark,
     tertiary = SkyTertiaryDark,
+    onTertiary = Color(0xFF082F49),
+    tertiaryContainer = Color(0xFF0C4A6E),
+    onTertiaryContainer = Color(0xFFBAE6FD),
     background = BackgroundDark,
     surface = SurfaceDark,
     surfaceVariant = SurfaceVariantDark,
     outline = OutlineDark,
+    outlineVariant = Color(0xFF334155),
     onBackground = Color(0xFFF1F5F9),
-    onSurface = Color(0xFFF8FAFC)
+    onSurface = Color(0xFFF8FAFC),
+    onSurfaceVariant = Color(0xFF94A3B8)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -39,18 +44,23 @@ private val LightColorScheme = lightColorScheme(
     secondaryContainer = TealSecondaryContainerLight,
     onSecondaryContainer = TealOnSecondaryContainerLight,
     tertiary = SkyTertiaryLight,
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFE0F2FE),
+    onTertiaryContainer = Color(0xFF0369A1),
     background = BackgroundLight,
     surface = SurfaceLight,
     surfaceVariant = SurfaceVariantLight,
     outline = OutlineLight,
+    outlineVariant = Color(0xFFE2E8F0),
     onBackground = Color(0xFF0F172A),
-    onSurface = Color(0xFF0F172A)
+    onSurface = Color(0xFF0F172A),
+    onSurfaceVariant = Color(0xFF64748B)
 )
 
 @Composable
 fun TaskPulseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Set false by default to preserve the signature Indigo & Teal brand theme
+    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

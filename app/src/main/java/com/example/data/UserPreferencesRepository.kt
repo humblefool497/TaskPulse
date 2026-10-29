@@ -58,6 +58,12 @@ class UserPreferencesRepository(context: Context) {
     private val _onboardingCompleted = MutableStateFlow(prefs.getBoolean(KEY_ONBOARDING_DONE, false))
     val onboardingCompleted: StateFlow<Boolean> = _onboardingCompleted.asStateFlow()
 
+    private val _themeMode = MutableStateFlow(prefs.getString(KEY_THEME_MODE, "SYSTEM") ?: "SYSTEM")
+    val themeMode: StateFlow<String> = _themeMode.asStateFlow()
+
+    private val _useDynamicColor = MutableStateFlow(prefs.getBoolean(KEY_DYNAMIC_COLOR, true))
+    val useDynamicColor: StateFlow<Boolean> = _useDynamicColor.asStateFlow()
+
     fun setNextNDays(days: Int) {
         prefs.edit().putInt(KEY_NEXT_N_DAYS, days).apply()
         _nextNDays.value = days
@@ -126,6 +132,16 @@ class UserPreferencesRepository(context: Context) {
         _onboardingCompleted.value = completed
     }
 
+    fun setThemeMode(mode: String) {
+        prefs.edit().putString(KEY_THEME_MODE, mode).apply()
+        _themeMode.value = mode
+    }
+
+    fun setDynamicColor(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_DYNAMIC_COLOR, enabled).apply()
+        _useDynamicColor.value = enabled
+    }
+
     companion object {
         private const val KEY_NEXT_N_DAYS = "key_next_n_days"
         private const val KEY_MORNING_HOUR = "key_morning_hour"
@@ -141,5 +157,7 @@ class UserPreferencesRepository(context: Context) {
         private const val KEY_GOOGLE_CAL_CONNECTED = "key_google_cal_connected"
         private const val KEY_OUTLOOK_CAL_CONNECTED = "key_outlook_cal_connected"
         private const val KEY_ONBOARDING_DONE = "key_onboarding_done"
+        private const val KEY_THEME_MODE = "key_theme_mode"
+        private const val KEY_DYNAMIC_COLOR = "key_dynamic_color"
     }
 }

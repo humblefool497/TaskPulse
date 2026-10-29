@@ -1,134 +1,184 @@
-# TaskPulse
+# TaskPulse ⚡
 
-**TaskPulse** is a professional task, reminder, and follow-up manager engineered for people who juggle demanding official and personal responsibilities. It ensures **zero task slippage** through intelligent criticality triage, action tracking, escalating exact alarms, recurring deadlines, and seamless calendar & Google Sheets integrations.
+[![Android CI](https://img.shields.io/badge/Platform-Android-3DDC84.svg?style=flat&logo=android)](https://developer.android.com)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2-7F52FF.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+[![Compose](https://img.shields.io/badge/Jetpack%20Compose-M3-4285F4.svg?style=flat&logo=jetpackcompose)](https://developer.android.com/jetpack/compose)
+[![Room](https://img.shields.io/badge/Room-SQLite%202.7-F80000.svg?style=flat)](https://developer.android.com/training/data-storage/room)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
----
-
-## 🌟 Key Features
-
-1. **Dashboard Command Center**
-   - Live greeting with dynamic date and urgent status indicator.
-   - Metric summary cards: **Overdue** (red, priority), **Due Today**, **Due This Week**, **Due Next Week**, **Due in Next N Days** (configurable, default 30), and **Pending Follow-ups**.
-   - **Criticality Triage Matrix**: Critical, High, Medium, and Low counts as filter chips.
-   - **Needs Immediate Attention**: Pinned carousel for Critical & Immediate Action tasks.
-   - **Today's Focus**: Top tasks of the day sorted by priority and deadline.
-   - **Natural Language Quick Add**: Type phrases like `"Call vendor tomorrow 5pm high follow-up"` to instantly parse title, deadline, priority, action, and category.
-
-2. **Task Classification & Model**
-   - **Title**: Required, character counter (up to 120 chars).
-   - **Criticality**: Critical (Red), High (Orange), Medium (Blue), Low (Green), each with distinct accessibility icons.
-   - **Action Needed**: Follow-up Needed, To Act Myself, To Assign to Someone Else, Immediate Attention / Completion Needed.
-   - **Task Origin**: Autocomplete dropdown remembering previous values (Boss, Client, Meeting, Email, Family, Vendor, Self).
-   - **Categories**: Official, Personal, Finance/Bills, Health, Family, Education/Kids, Shopping/Errands, Travel, Home/Maintenance, Learning/Skill, Legal/Compliance, Meetings, Other (plus custom user-created categories).
-   - **Subtasks / Checklist**: With interactive progress bar and item count.
-   - **Reminders**: Multiple reminder offsets (at deadline, 15m, 1h, 1d, 3d before) via exact `AlarmManager` alarms.
-   - **Recurrence**: None, Daily, Weekly, Monthly, Yearly, Custom Interval with automatic generation of the next occurrence upon completion.
-   - **Assignee & Follow-up**: Conditional fields with contact details and follow-up alerts.
-   - **Progress Log**: Timestamped activity updates.
-
-3. **Calendar Integration**
-   - **In-App Calendar**: Month view, Week view, and Agenda view with dot indicators color-coded by task criticality.
-   - **Device & Cloud Calendar Sync**: Immediate zero-setup sync via Android's `CalendarContract` to Google Calendar or Outlook Calendar accounts on the device.
-   - Cloud REST API support for Google Calendar API v3 and Microsoft Graph Calendar API.
-
-4. **Google Sheets & CSV Export**
-   - Export all or filtered/selected tasks directly to CSV or Google Sheets.
-   - Complete columns: Title, Description, Criticality, Action Needed, Originated From, Category, Deadline, Status, Assigned To, Follow-up Date, Tags, Recurrence, Created At, Completed At.
-   - Formatted header row (bold, frozen, navy background), auto-sized columns, and color-coded priority cells.
-   - Shareable via Android Share Sheet.
-
-5. **Notifications & Reminders**
-   - Channels configured per criticality level (`channel_critical` with DND bypass support).
-   - Notification actions: **Mark Done** and **Snooze 1h** directly from the status bar.
-   - `DailyDigestWorker` via WorkManager for Morning Focus Digest and Evening Review.
-   - `BootReceiver` reschedules all exact alarms upon device reboot.
-   - Auto-cleanup of deleted tasks from trash after 30 days.
-
-6. **Insights & Analytics**
-   - Completion rate score ring.
-   - Overdue load analysis and active in-progress counts.
-   - Criticality, category, and origin breakdown bars.
+**TaskPulse** is a professional task, reminder, and follow-up manager engineered for professionals who juggle demanding official responsibilities and personal commitments. Built with zero compromises on performance and reliability, TaskPulse prevents task slippage through intelligent criticality triage, deadline bucketing, escalating exact alarms, background digestion, and seamless integrations with Google Calendar, Outlook, and Google Sheets.
 
 ---
 
-## 🛠️ Architecture & Technologies
+## 📸 Highlights & Screenshots
 
-- **Architecture**: MVVM with Clean Architecture and Repository Pattern.
-- **Language**: Kotlin 2.2 with Kotlin Coroutines & Flow.
-- **UI Framework**: Jetpack Compose with Material 3 (M3).
-- **Local Persistence**: Android Room 2.7 with KSP symbol processing.
-- **Background Tasks**: Android WorkManager 2.10 and AlarmManager exact alarms (`SCHEDULE_EXACT_ALARM`, `USE_EXACT_ALARM`).
-- **Navigation**: Jetpack Navigation Compose with type-safe routing.
-- **Adaptive UI**: Responsive layouts supporting compact phones and wide screens/tablets (`NavigationRail`).
+- **Day & Night Themes**: Automatically adapts to your phone's system light/dark theme, with support for Material You dynamic wallpaper colors on Android 12+.
+- **Command Center Dashboard**: Triage overdue tasks, view today's focus, tap quick-add natural language input, and inspect criticality chips.
+- **Action Matrix**: Categorize tasks by *To Act Myself*, *Follow-up Needed*, *To Assign to Someone Else*, or *Immediate Attention*.
+- **Calendar & Agenda**: Visual dot indicators color-coded by urgency with native Android `CalendarContract` sync.
+- **Export & Backup**: One-tap formatted Google Sheets and CSV export, plus complete JSON backup and restore.
 
 ---
 
-## 🔑 Setup Guide: Google & Microsoft API Credentials
+## 🌟 Core Features
 
-### 1. Google Calendar & Google Sheets API Setup
+### 1. Dashboard Command Center
+- **Smart Greeting**: Displays dynamic local date and real-time urgency metrics (e.g. `2 overdue tasks require immediate action`).
+- **Deadline Bucket Cards**: Horizontally scrollable summary cards for **Overdue** (pulsing red priority), **Due Today**, **Due This Week**, **Due Next Week**, **Next N Days** (user-configurable, default 30), and **Pending Follow-ups**.
+- **Criticality Triage Matrix**: Symmetrical 4-card priority matrix (Critical, High, Medium, Low) featuring perfectly centered notification badges and one-tap filtering.
+- **Needs Immediate Attention**: Pinned spotlight section for Critical tasks and immediate action items.
+- **Natural Language Quick Add**: Type phrases like `"Call vendor tomorrow 5pm high follow-up"` to instantly parse title, deadline, priority, action, and category without opening forms.
 
-1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2. Create a new project named `TaskPulse`.
-3. In **APIs & Services > Library**, enable:
-   - `Google Calendar API`
-   - `Google Sheets API`
-   - `Google Drive API`
-4. In **OAuth consent screen**:
-   - Set User Type to **External** (or Internal for Workspace organizations).
-   - Add scopes:
-     - `https://www.googleapis.com/auth/calendar.events`
-     - `https://www.googleapis.com/auth/spreadsheets`
-     - `https://www.googleapis.com/auth/drive.file`
-5. In **Credentials > Create Credentials > OAuth client ID**:
-   - Application type: **Android**
-   - Package name: `com.aistudio.taskpulse.wqkvtz`
-   - SHA-1 certificate fingerprint: Obtain from keystore using:
-     ```bash
-     keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
-     ```
+### 2. Task Model & Field Architecture
+Every task contains complete, production-grade tracking attributes:
+- **Title**: Required, with character limits and counters (up to 120 chars).
+- **Description**: Multi-line markdown notes.
+- **Criticality / Importance**:
+  - 🔴 **Critical** (Level 4)
+  - 🟠 **High** (Level 3)
+  - 🔵 **Medium** (Level 2)
+  - 🟢 **Low** (Level 1)
+- **Action Needed**:
+  - *Immediate Attention / Completion Needed*
+  - *To Act Myself*
+  - *Follow-up Needed* (reveals dedicated Follow-up Date and custom alarm)
+  - *To Assign to Someone Else* (reveals Assignee name/contact with device contact picker)
+- **Origin Tracking**: Autocomplete history remembering where tasks originated (e.g., Boss, Client, Meeting, Email, Family, Vendor, Self).
+- **Taxonomy / Categories**: Official, Personal, Finance/Bills, Health, Family, Education/Kids, Shopping/Errands, Travel, Home/Maintenance, Learning/Skill, Legal/Compliance, Meetings, Other (plus user-created custom categories).
+- **Subtasks & Checklists**: Progress bar with live completion tracking.
+- **Recurrence Engine**: None, Daily, Weekly, Monthly, Yearly, and Custom Intervals with auto-generation of next occurrences on task completion.
+- **Timestamped Activity Logs**: Chronological progress notes (e.g., `"Left voicemail with vendor at 10:15 AM"`).
+- **Pinned / Starred Flags**: Elevates priority tasks to the top of all views.
 
-### 2. Microsoft Outlook Calendar (MSAL / Microsoft Graph) Setup
+### 3. Day & Night System Theming
+- **Adaptive Mode**: Follows your Android device's day/night theme automatically.
+- **Theme Lock**: Choose **System Default**, **Light Mode**, or **Dark Mode** in Settings.
+- **Material You Dynamic Colors**: On Android 12+ (API 31+), matches accent colors directly to the user's wallpaper.
+- **Accessibility & Contrast**: Conforms to WCAG AA contrast standards with custom semantic tokens for both light and dark backgrounds.
 
-1. Go to the [Microsoft Entra ID (Azure Portal)](https://portal.azure.com/).
-2. Navigate to **App registrations > New registration**.
-3. Set name to `TaskPulse` and supported account types to **Accounts in any organizational directory and personal Microsoft accounts**.
-4. In **Authentication > Add a platform > Android**:
-   - Package name: `com.aistudio.taskpulse.wqkvtz`
-   - Signature hash: Obtain the Base64 SHA-1 hash from your keystore.
-5. In **API permissions > Add a permission > Microsoft Graph**:
-   - Add Delegated permissions: `Calendars.ReadWrite`, `User.Read`.
+### 4. Background Alarms & WorkManager
+- **Exact Alarms**: High-precision `AlarmManager` reminders configured with `SCHEDULE_EXACT_ALARM` / `USE_EXACT_ALARM`.
+- **Pre-deadline Offsets**: Multiple reminders per task (at deadline, 15m, 1h, 1d, 3d before, or custom).
+- **Notification Channels**: Specialized channels per criticality level with lockscreen visibility and quick actions:
+  - ✅ **Complete**: Marks task complete directly from the status bar.
+  - ⏰ **Snooze 1h**: Postpones alarm by 60 minutes with one tap.
+- **Daily Digest Worker**: Periodic WorkManager worker for Morning Focus (8:30 AM) and Evening Review (8:00 PM).
+- **Boot Recovery**: `BootReceiver` automatically reschedules pending alarms upon device restart.
+- **Trash Auto-Purge**: Permanently clears items deleted more than 30 days ago.
 
-*Note: TaskPulse includes native device calendar integration out of the box, allowing instant one-tap sync to whichever Google or Microsoft account is signed into the Android device without waiting for cloud client IDs.*
+### 5. Calendar & Google Sheets Sync
+- **Device Calendar Sync**: Direct zero-latency synchronization with Google Calendar, Microsoft Outlook, or Exchange via `CalendarContract`.
+- **Google Sheets / CSV Export**: Formatted tables with header styling, colored priority tags, and complete metadata ready for executive reporting.
+- **JSON Backup & Restore**: Export full database snapshots as portable JSON files to share or restore anytime.
 
 ---
 
-## 📦 How to Build and Generate APK
+## 🏛️ Project Architecture
 
-### Debug APK Build
-Run in project root:
+TaskPulse follows **Clean Architecture** with the **MVVM** pattern:
+
+```
+app/src/main/java/com/example/
+├── TaskPulseApplication.kt          # Application lifecycle, dependency initialization
+├── MainActivity.kt                  # Edge-to-edge entry point, theme binding, navigation
+├── data/
+│   ├── TaskPulseDatabase.kt        # Room database definition with type converters
+│   ├── TaskDao.kt                  # Optimized SQLite queries with Kotlin Flow
+│   ├── TaskRepository.kt           # Central data source for CRUD and exports
+│   └── UserPreferencesRepository.kt# Preferences (theme, digest times, custom categories)
+├── engine/
+│   ├── NaturalLanguageTaskParser.kt# Heuristic NLP parser for dates, priorities, actions
+│   ├── RecurrenceEngine.kt         # Calculation of next recurring deadlines
+│   ├── CalendarSyncManager.kt      # Android CalendarContract integration
+│   ├── SheetsExportManager.kt      # CSV and Google Sheets format generator
+│   └── TaskDuplicateDetector.kt    # Levenshtein similarity detection
+├── model/
+│   ├── TaskItem.kt                 # Core task entity (Room @Entity)
+│   ├── TaskEnums.kt                # Criticality, ActionNeeded, Status, Recurrence
+│   └── TaskDefaults.kt             # Preset templates, origins, and categories
+├── notification/
+│   ├── NotificationHelper.kt       # Notification channels and notification builder
+│   └── TaskPulseAlarmScheduler.kt  # Exact alarm scheduling via AlarmManager
+├── receiver/
+│   ├── AlarmReceiver.kt            # Broadcast receiver for reminder events
+│   └── BootReceiver.kt             # Device restart boot receiver
+├── worker/
+│   └── DailyDigestWorker.kt        # WorkManager worker for daily digests and cleanup
+└── ui/
+    ├── TaskPulseViewModel.kt       # Unified state management with StateFlow
+    ├── navigation/Screen.kt        # Navigation routes and bottom bar destinations
+    ├── theme/                      # Day/Night Color schemes, Type, Theme.kt
+    ├── components/                 # TaskCard, QuickAddBar, TemplatePicker, DatePickers
+    └── screens/
+        ├── dashboard/              # Command Center, metric cards, triage matrix
+        ├── tasks/                  # Task list, search, multi-filter, bulk selection
+        ├── editor/                 # Full-featured task editor & creator
+        ├── calendar/               # Month, week, agenda views with dot badges
+        ├── insights/               # Productivity analytics & completion graphs
+        └── settings/               # Appearance, calendar sync, backup & restore
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Android Studio**: Ladybug (2024.2) or newer recommended
+- **JDK**: Java 17 or Java 21
+- **Android SDK**: Compile SDK 36, Minimum SDK 26 (Android 8.0 Oreo)
+
+### Clone & Build
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/TaskPulse.git
+cd TaskPulse
+
+# Run local JVM unit & Robolectric tests
+gradle :app:testDebugUnitTest
+
+# Assemble Debug APK
 gradle :app:assembleDebug
 ```
-Output location:
-`app/build/outputs/apk/debug/app-debug.apk`
 
-### Unit Tests
-Run local JVM unit and Robolectric tests:
+The compiled APK will be located at:
+```
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+---
+
+## 🧪 Testing
+
+TaskPulse includes automated test suites covering data models, recurrence calculations, and NLP parsing:
+
 ```bash
+# Execute unit tests
+gradle test
+
+# Execute app unit tests specifically
 gradle :app:testDebugUnitTest
 ```
 
-### Release Signed APK via Android Studio
-1. Open the project folder in Android Studio.
-2. Select **Build > Generate Signed Bundle / APK...**
-3. Choose **APK**, select the keystore path and key alias.
-4. Select `release` build variant and click **Finish**.
-5. The signed APK will be generated in `app/release/`.
+Key test files:
+- `ExampleUnitTest.kt`: Unit tests for NLP parsing, recurrence calculation, and criticality levels.
+- `ExampleRobolectricTest.kt`: Robolectric tests validating UI components and database interactions without requiring an emulator.
 
 ---
 
-## 📝 Assumptions Made
-1. **Device-First Storage**: Tasks and user configurations are persisted locally in Room SQLite, ensuring complete offline functionality and instantaneous load times.
-2. **Zero-Setup Native Sync**: The native Android `CalendarContract` integration is used for instant calendar sync with connected device accounts (Google, Outlook, Exchange), while cloud API payload builders are provided for direct REST sync.
-3. **Escalating Reminders**: For Critical tasks, alarms trigger exact notifications with high-priority audio and vibration patterns.
-4. **Automatic 30-Day Trash Purge**: Items moved to trash are automatically deleted after 30 days via `DailyDigestWorker`.
+## 📄 License
+
+```
+Copyright 2026 TaskPulse Contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

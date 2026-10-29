@@ -340,24 +340,39 @@ fun DashboardScreen(
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        FlowRow(
+                        Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            CriticalityTriageChip(Criticality.CRITICAL, criticalCount) {
+                            CriticalityTriageCard(
+                                criticality = Criticality.CRITICAL,
+                                count = criticalCount,
+                                modifier = Modifier.weight(1f)
+                            ) {
                                 viewModel.setFilterCriticality(Criticality.CRITICAL)
                                 onNavigateToTasks(null)
                             }
-                            CriticalityTriageChip(Criticality.HIGH, highCount) {
+                            CriticalityTriageCard(
+                                criticality = Criticality.HIGH,
+                                count = highCount,
+                                modifier = Modifier.weight(1f)
+                            ) {
                                 viewModel.setFilterCriticality(Criticality.HIGH)
                                 onNavigateToTasks(null)
                             }
-                            CriticalityTriageChip(Criticality.MEDIUM, mediumCount) {
+                            CriticalityTriageCard(
+                                criticality = Criticality.MEDIUM,
+                                count = mediumCount,
+                                modifier = Modifier.weight(1f)
+                            ) {
                                 viewModel.setFilterCriticality(Criticality.MEDIUM)
                                 onNavigateToTasks(null)
                             }
-                            CriticalityTriageChip(Criticality.LOW, lowCount) {
+                            CriticalityTriageCard(
+                                criticality = Criticality.LOW,
+                                count = lowCount,
+                                modifier = Modifier.weight(1f)
+                            ) {
                                 viewModel.setFilterCriticality(Criticality.LOW)
                                 onNavigateToTasks(null)
                             }
@@ -555,9 +570,10 @@ fun MetricSummaryCard(
 }
 
 @Composable
-fun CriticalityTriageChip(
+fun CriticalityTriageCard(
     criticality: Criticality,
     count: Int,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
@@ -565,41 +581,60 @@ fun CriticalityTriageChip(
     val container = criticality.getContainerColor(isDark)
 
     Surface(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         color = container,
-        modifier = Modifier.clickable(onClick = onClick)
+        border = BorderStroke(1.dp, color.copy(alpha = if (isDark) 0.4f else 0.25f)),
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick)
+            .testTag("criticality_triage_${criticality.name.lowercase()}")
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 4.dp)
         ) {
-            Icon(
-                imageVector = criticality.getIcon(),
-                contentDescription = null,
-                tint = color,
-                modifier = Modifier.size(14.dp)
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = criticality.label,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = color
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Surface(
-                shape = CircleShape,
-                color = color,
-                modifier = Modifier.size(18.dp)
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .clip(CircleShape)
+                    .background(color),
+                contentAlignment = Alignment.Center
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(
-                        text = count.toString(),
-                        fontSize = 10.sp,
+                Text(
+                    text = count.toString(),
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        platformStyle = androidx.compose.ui.text.PlatformTextStyle(includeFontPadding = false)
                     )
-                }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    imageVector = criticality.getIcon(),
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier.size(13.dp)
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = criticality.label,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = color,
+                    maxLines = 1
+                )
             }
         }
     }

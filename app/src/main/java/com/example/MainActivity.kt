@@ -72,11 +72,21 @@ class MainActivity : ComponentActivity() {
         val app = (application as? TaskPulseApplication) ?: TaskPulseApplication.instance
 
         setContent {
-            TaskPulseTheme {
-                val viewModel: TaskPulseViewModel = viewModel(
-                    factory = TaskPulseViewModel.factory(app)
-                )
+            val viewModel: TaskPulseViewModel = viewModel(
+                factory = TaskPulseViewModel.factory(app)
+            )
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val systemInDark = androidx.compose.foundation.isSystemInDarkTheme()
+            val isDarkTheme = when (uiState.themeMode) {
+                "DARK" -> true
+                "LIGHT" -> false
+                else -> systemInDark
+            }
 
+            TaskPulseTheme(
+                darkTheme = isDarkTheme,
+                dynamicColor = uiState.useDynamicColor
+            ) {
                 // Request POST_NOTIFICATIONS on Android 13+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     val permissionLauncher = rememberLauncherForActivityResult(

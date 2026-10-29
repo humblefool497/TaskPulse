@@ -69,6 +69,8 @@ data class TaskUiState(
     val googleCalendarConnected: Boolean = false,
     val outlookCalendarConnected: Boolean = false,
     val onboardingCompleted: Boolean = false,
+    val themeMode: String = "SYSTEM",
+    val useDynamicColor: Boolean = true,
     val userMessage: String? = null
 )
 
@@ -109,6 +111,8 @@ class TaskPulseViewModel(
         prefsRepository.googleCalendarConnected,
         prefsRepository.outlookCalendarConnected,
         prefsRepository.onboardingCompleted,
+        prefsRepository.themeMode,
+        prefsRepository.useDynamicColor,
         _searchQuery,
         _filterBucket,
         _filterCriticality,
@@ -134,6 +138,8 @@ class TaskPulseViewModel(
         val gCal = args[idx++] as Boolean
         val oCal = args[idx++] as Boolean
         val onbDone = args[idx++] as Boolean
+        val tMode = args[idx++] as String
+        val dynColor = args[idx++] as Boolean
         val query = args[idx++] as String
         val bucket = args[idx++] as DateBucket?
         val crit = args[idx++] as Criticality?
@@ -187,6 +193,8 @@ class TaskPulseViewModel(
             googleCalendarConnected = gCal,
             outlookCalendarConnected = oCal,
             onboardingCompleted = onbDone,
+            themeMode = tMode,
+            useDynamicColor = dynColor,
             userMessage = msg
         )
     }.stateIn(
@@ -487,6 +495,8 @@ class TaskPulseViewModel(
     fun setOutlookCalendarConnected(connected: Boolean) = prefsRepository.setOutlookCalendarConnected(connected)
     fun setOnboardingCompleted(completed: Boolean) = prefsRepository.setOnboardingCompleted(completed)
     fun setAppLockEnabled(enabled: Boolean) = prefsRepository.setAppLockEnabled(enabled)
+    fun setThemeMode(mode: String) = prefsRepository.setThemeMode(mode)
+    fun setDynamicColor(enabled: Boolean) = prefsRepository.setDynamicColor(enabled)
 
     private fun filterAndSortTasks(
         tasks: List<TaskItem>,
